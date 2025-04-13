@@ -9,7 +9,7 @@ use App\Models\Post;
 class PostController extends Controller
 {
     public function index(){
-        $post = Post::all();
+        $post = Post::paginate(10);
         return view('post.index',compact('post'));
     }
 

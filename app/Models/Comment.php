@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class Post extends Model
+class Comment extends Model
 {
     use HasFactory;
-    protected $table = 'Posts';
-    protected $fillable = ['title','body'];
+    protected $table = 'comments';
+    protected $fillable = ['post_id','commenter_name','comment'];
 
-    public function comments()
+    public function post()
 {
-    return $this->hasMany(Comment::class);
+    return $this->belongsTo(Post::class);
+
     // this will work like given bewlow
     // SELECT * FROM comments WHERE post_id = $post->id;
+
 }
 
 }
