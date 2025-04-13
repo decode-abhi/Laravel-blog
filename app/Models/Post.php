@@ -18,5 +18,9 @@ class Post extends Model
     // this will work like given bewlow
     // SELECT * FROM comments WHERE post_id = $post->id;
 }
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 
 }

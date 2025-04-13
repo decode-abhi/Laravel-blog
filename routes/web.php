@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Category\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Middleware\AgeCheck;
@@ -45,6 +46,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}',[PostController::class,'edit'])->name('edit');
         Route::post('/update/{id}',[PostController::class,'update'])->name('update');
         Route::get('/delete/{id}',[PostController::class,'destroy'])->name('destroy');
+    });
+    Route::group(['prefix' => 'category', 'as' => 'category.'],function(){
+        Route::get('/index',[CategoryController::class,'index'])->name('index');
     });
 });
 

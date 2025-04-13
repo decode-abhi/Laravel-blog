@@ -81,12 +81,17 @@
 
 </head>
 <body>
+    
         <h1>Post list</h1>
         <a href="{{route('post.create')}}">Create New Post</a>
         @include('message')
         @foreach($post as $postItem)
             <div class="post-container">
-                <h3><b> <h2>({{ $postItem->id }})</h2></b> <br>    {{ $postItem->title }}</h3>
+                <h3><b> <h2>({{ $postItem->id }}) 
+                   {{ $postItem->category->name ? $postItem->category->name : '' }}
+                    
+                </h2></b>
+                 <br>    {{ $postItem->title }}</h3>
                 <p>{{ $postItem->body }}</p>
                 <div class="btn-container">
                 <a href="{{route('post.edit',$postItem->id)}}" class="edit">Edit Post</a>
@@ -95,9 +100,9 @@
                <div class="comment">
                 @if($postItem->comments->count())
                     <h4>comments:</h4>
-                        @foreach($postItem->comments as $comment)
+                        @foreach($postItem->comments as $in => $comment)
                             <ol>
-                                <li><b>{{$comment->commenter_name }}</b></li>
+                                <li>{{$in}}<b>{{$comment->commenter_name }}</b></li>
                             </ol>
                             <ul>
                                 <li>{{$comment->comment}}</li>
