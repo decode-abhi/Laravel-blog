@@ -55,17 +55,34 @@
     td:last-child:hover, td:nth-last-child(2):hover {
         text-decoration: underline;
     }
+    a {
+        display: inline-block;
+        background-color: #3498db;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+        background-color: #2980b9;
+    }
 </style>
 
 </head>
 <body>
     <h1>All Categories</h1>
+        <a href="{{route('category.create')}}">Create New Category</a>
+        @include('message')
     <div class="category-container">
         <table border="1">
             <thead>
                 <tr>
                     <th>id</th>
                     <th>name</th>
+                    <th>image</th>
                     <th>edit</th>
                     <th>delete</th>
                 </tr>
@@ -75,6 +92,14 @@
                 <tr>
                     <td>{{$cat->id}}</td>
                     <td>{{$cat->name}}</td>
+                    <td>
+                        @if($cat->image && $cat->image != null)
+                            <img src="{{asset('/storage/'.$cat->image)}}" alt="" width="150px">
+                        @else
+                            <img src="https://exotique.com.mt/wp-content/uploads/woocommerce-placeholder.png" alt="" width="150px">
+                        @endif
+
+                    </td>
                     <td>edit</td>
                     <td>delete</td>
                 </tr>

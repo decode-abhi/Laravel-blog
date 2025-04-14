@@ -77,6 +77,22 @@
         padding: 5px;
         margin-bottom: 20px;
     }
+    .post-header span {
+    width: 400px;
+    display: block;
+    float: right;
+}
+    .post-header img {
+    width: 200px;
+    float: right;
+}
+.title{
+    color:#000;
+    text-transform:uppercase;
+    font-size:18px;
+    font-weight:700;
+    margin-top:20px;
+}
 </style>
 
 </head>
@@ -87,11 +103,24 @@
         @include('message')
         @foreach($post as $postItem)
             <div class="post-container">
-                <h3><b> <h2>({{ $postItem->id }}) 
-                   {{ $postItem->category->name ? $postItem->category->name : '' }}
-                    
-                </h2></b>
-                 <br>    {{ $postItem->title }}</h3>
+                <div class="post-header">
+                            <h2>({{ $postItem->id }}) 
+                    @if($postItem->category_id && $postItem->category_id != null)
+                        {{ $postItem->category->name ? $postItem->category->name : '' }}
+                    @else
+                        category not avilable
+                    @endif
+
+                        </h2>
+                         <h4 class="title">   {{ $postItem->title }} </h4>
+                            <span>
+                                @if($postItem->image_path && $postItem->image_path != null)
+                                    <img src="{{asset('/storage/'.$postItem->image_path)}}" alt="">
+                                @else
+                                <img src="https://exotique.com.mt/wp-content/uploads/woocommerce-placeholder.png" alt="">
+                                @endif
+                            </span>
+                </div>
                 <p>{{ $postItem->body }}</p>
                 <div class="btn-container">
                 <a href="{{route('post.edit',$postItem->id)}}" class="edit">Edit Post</a>

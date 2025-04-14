@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Category;
 
 class PostController extends Controller
 {
@@ -14,29 +15,41 @@ class PostController extends Controller
     }
 
     public function create(){
-        
-        return view('post.create');
+        $cat = Category::all();
+        return view('post.create',compact('cat'));
     }
 
     public function store(Request $request){
         $validator = $request->validate([
             'title' => 'required|unique:posts',
             'body' => 'required',
+            'post_image' => 'required|max:5000',
+            'category' => 'required',
         ],
         [
             'title.required' => 'title is required',
             'title.unique' => 'title is taken',
-            'body.required' => 'content is required'
+            'body.required' => 'content is required',
+            'post_image.required' => 'Image is required',
+            // 'post_image.mimes' => 'you can not store this type of file',
+            'post_image.max' => 'image is more then size of 5MB',
+            'category.required' => 'category is not selected',
         ]);
-        Post::create($validator);
-        // if ($validator->passes()) {
-        //     $post = new Post();
-        //     $post->title = $request->title;
-        //     $post->body = $request->body;
-        //     $post->save();
-
+        // Post::create($validator);
+        $file = $request->file('post_image');
+        $fileName = time().'.'.$file->extension();
+        $path = $file->storeAs('uploads',$fileName,'public');
+        
+        if($validator){
+            $post = new Post();
+            $post->title = $request->title;
+            $post->body = $request->body;
+            $post->category_id = $request->category;
+            $post->image_path = $path;
+            $post->save();
+        }
             return redirect()->route('post.index')->with('success', 'Post created successfully!');
-        // }
+       
     }
     public function edit($id){
         $post = Post::findOrFail($id);

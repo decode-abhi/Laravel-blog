@@ -15,7 +15,7 @@ class Post extends Model
     public function comments()
 {
     return $this->hasMany(Comment::class);
-    // this will work like given bewlow
+    // this will work like given below
     // SELECT * FROM comments WHERE post_id = $post->id;
 }
 public function category()
