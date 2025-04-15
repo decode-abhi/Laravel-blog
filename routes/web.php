@@ -7,6 +7,8 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Mail\EmailController;
+
 use App\Http\Middleware\AgeCheck;
 use App\Http\Middleware\AdminCheck;
 use App\Http\Middleware\EveningCheck;
@@ -61,6 +63,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/create',[UserController::class,'create'])->name('create');
         Route::post('/store',[UserController::class,'store'])->name('store');
     });
+   Route::group(['prefix' => 'mail', 'as' => 'mail.'],function(){
+        Route::get('/job-application',[EmailController::class,'jobApplication'])->name('jobApplication');
+        Route::post('/sand-job-mail',[EmailController::class,'jobMail'])->name('jobMail');
+        Route::view('/thank-you','mail.thankyou')->name('thankyou');
+        Route::get('/applicant-list',[EmailController::class,'index'])->name('index');
+   });
 });
 
 require __DIR__.'/auth.php';
