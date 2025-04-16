@@ -75,6 +75,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/thankyou','payment.thankyou')->name('thankyou');
     Route::post('/razorpay',[PaymentController::class, 'createPayment'])->name('razorpay');
     Route::get('/razorpayAuth',[PaymentController::class, 'testRazorpayAuth'])->name('testRazorpayAuth');
+    Route::view('/stripe-form','payment.stripeForm')->name('stripe-form');
+    Route::post('/stripe-payment', [PaymentController::class,'createStripePayment'])->name('stripe-payment');
    });
 });
 
