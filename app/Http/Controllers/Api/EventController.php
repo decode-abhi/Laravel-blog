@@ -13,7 +13,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $event = Event::all();
+        $event = Event::paginate(2);
         return response()->json($event,201);
     }
 

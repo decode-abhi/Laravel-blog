@@ -8,7 +8,7 @@ use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Mail\EmailController;
-
+use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Middleware\AgeCheck;
 use App\Http\Middleware\AdminCheck;
 use App\Http\Middleware\EveningCheck;
@@ -68,6 +68,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/sand-job-mail',[EmailController::class,'jobMail'])->name('jobMail');
         Route::view('/thank-you','mail.thankyou')->name('thankyou');
         Route::get('/applicant-list',[EmailController::class,'index'])->name('index');
+   });
+
+   Route::group(['prefix' => 'payment', 'as' => 'payment.'], function(){
+    Route::view('/payment-form','payment.paymentForm')->name('payment-form');
+    Route::view('/thankyou','payment.thankyou')->name('thankyou');
+    Route::post('/razorpay',[PaymentController::class, 'createPayment'])->name('razorpay');
+    Route::get('/razorpayAuth',[PaymentController::class, 'testRazorpayAuth'])->name('testRazorpayAuth');
    });
 });
 
