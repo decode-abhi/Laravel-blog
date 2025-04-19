@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FileHandlingController;
 use App\Http\Controllers\Post\PostController;
@@ -7,17 +8,17 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Mail\EmailController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Middleware\AgeCheck;
 use App\Http\Middleware\AdminCheck;
 use App\Http\Middleware\EveningCheck;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsCustomer;
+use App\Http\Middleware\RedirectIfAuthenticatedUser;
 
-Route::get('/', [AuthenticatedSessionController::class,'create'])->middleware('guest');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::view('/', 'home')->middleware('guest');
 
 
 Route::middleware('checkMid')->group(function(){
@@ -34,10 +35,15 @@ Route::middleware('checkMid')->group(function(){
         return 'it is evening';
     });
 });
+
 Route::get('/no-access', function () {
     return "Sorry! You are not allowed.";
 });
+Route::middleware('ifAuthenticated')->group(function(){
+    Route::get('/admin/login',[AdminController::class,'showLoginForm'])->name('admin.login');
+    Route::post('/admin/loginStore',[AdminController::class,'store'])->name('admin.loginStore');
 
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,6 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::view('/files','fileHandling');
     Route::post('/files/store',[FileHandlingController::class,'store'])->name('files.store');
+    Route::get('/customer/dashboard',[DashboardController::class,'customerCreate'])->name('customer.dashboard')->middleware(IsCustomer::class);
+    Route::get('/admin/dashboard',[DashboardController::class,'adminCreate'])->name('admin.dashboard')->middleware(IsAdmin::class);
+
+    
     Route::group(['prefix'=>'post', 'as' => 'post.'],function(){
         Route::get('/index',[PostController::class,'index'])->name('index');
         Route::get('/create',[PostController::class,'create'])->name('create');

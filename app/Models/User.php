@@ -45,18 +45,34 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+    
+    //accessor examples
     public function getNameAttribute($value){
         return ucfirst($value);
     }
-    public function getRoleAttribute($value){
-        if($value == 1){
-            return 'Admin';
-        }else if($value == 0){
-            return 'Customer';
+    public function getRoleAttribute($value)
+{
+    if ($value == 1) {
+        return 'Admin';
+    } elseif ($value == 0) {
+        return 'Customer';
+    }
+
+    return $value; // fallback for unexpected values
+}
+
+    // mutator examples
+   
+
+    public function setRoleAttribute($value)
+    {
+        if ($value === 'Admin') {
+            $this->attributes['role'] = 1;
+        } elseif ($value === 'Customer') {
+            $this->attributes['role'] = 0;
+        } else {
+            $this->attributes['role'] = $value; 
         }
     }
-    public function setPasswordAttribute($value){
-        $this->attributes['password'] = bcrypt($value);
-    }
+    
 }

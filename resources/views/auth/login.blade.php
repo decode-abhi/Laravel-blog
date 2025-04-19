@@ -4,8 +4,13 @@
     <form method="POST" action="{{ route('login') }}">
         <p>
             @if($errors->any())
-             <b>{{$errors->all()}}</b>
-            @endif
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li><b>{{ $error }}</b></li>
+                @endforeach
+            </ul>
+        @endif
+        
         </p>
         @csrf
 

@@ -7,6 +7,7 @@ use App\Http\Middleware\AgeCheck;
 use App\Http\Middleware\AdminCheck;
 use App\Http\Middleware\IpCheck;
 use App\Http\Middleware\EveningCheck;
+use App\Http\Middleware\RedirectIfAuthenticatedUser;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             IpCheck::class,
             EveningCheck::class,
         ]);
+        $middleware->alias(['ifAuthenticated' => RedirectIfAuthenticatedUser::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
